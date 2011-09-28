@@ -54,8 +54,8 @@
     if (dbFile == NULL) {
         return NULL;
     }
-    NSString *dbPath = [NSString stringWithFormat:@"%@/%@", appDocsPath, dbFile];
-    return dbPath;
+
+    return [NSString stringWithFormat:@"%@/%@", appDocsPath, dbFile];
 }
 
 -(void) open: (NSMutableArray*)arguments withDict:(NSMutableDictionary*)options
@@ -116,15 +116,11 @@
     NSMutableArray *query_parts = [options objectForKey:@"query"];
     NSString *query = [query_parts objectAtIndex:0];
     
-    if (dbPath == NULL) {
+    if ((dbPath == NULL) || (query == NULL)) {
         [self respond:callback withString:@"{ message: 'You must specify database path' }" withType:@"error"];
         return;
     }
-    if (query == NULL) {
-        [self respond:callback withString:@"{ message: 'You must specify a query to execute' }" withType:@"error"];
-        return;
-    }
-    
+ 
     NSValue *dbPointer = [openDBs objectForKey:dbPath];
     if (dbPointer == NULL) {
         [self respond:callback withString:@"{ message: 'No such database, you must open it first' }" withType:@"error"];
